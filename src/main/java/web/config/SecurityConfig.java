@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -21,18 +22,34 @@ import javax.persistence.PersistenceContext;
 
 @Configuration
 @EnableWebSecurity
+//@EnableGlobalMethodSecurity(securedEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-//    private UserDetailsService userDetailsService;
-//
+    @Autowired
+    private UserDetailsService userDetailsService;
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+//    private LoginSuccessHandler loginSuccessHandler;
+
 //    @Autowired
 //    public void setUserDetailsService(@Qualifier("serviceDetails") UserDetailsService userDetailsService) {
 //        this.userDetailsService = userDetailsService;
 //    }
 
+//    @Autowired
+//    public void setLoginSuccessHandler(LoginSuccessHandler loginSuccessHandler) {
+//        this.loginSuccessHandler = loginSuccessHandler;
+//    }
+
+//    @Autowired
+//    public void configureGlobalSecurity(AuthenticationManagerBuilder auth) throws Exception {
+//        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+//    }
+
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication().withUser("ADMIN").password("ADMIN").roles("ADMIN");
+        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+//        auth.inMemoryAuthentication().withUser("ADMIN").password("ADMIN").roles("ADMIN");
     }
 
     @Override
@@ -67,12 +84,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/login").anonymous()
                 .antMatchers("/index").permitAll()
                 // защищенные URL
-                .antMatchers("/hello").access("hasAnyRole('ADMIN')").anyRequest().authenticated();
+                .antMatchers("/admin/**").hasRole("ADMIN")
+                .antMatchers("/user/**").hasAnyRole("USER","ADMIN")
+                .antMatchers("/hello").access("hasAnyRole('ADMIN','USER')").anyRequest().authenticated();
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder(12);
     }
 
 //    @Bean

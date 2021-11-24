@@ -10,7 +10,6 @@ import java.util.Set;
 @Table(name = "roles")
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 @EqualsAndHashCode
 public class Role implements GrantedAuthority {
 
@@ -31,8 +30,22 @@ public class Role implements GrantedAuthority {
     @Setter
     private Set<User> users;
 
+    public Role(String role) {
+        this.role = role;
+    }
+
+
+
     @Override
     public String getAuthority() {
         return role;
+    }
+
+    @Override
+    public String toString() {
+        return "Role{" +
+                "id=" + id +
+                ", role='" + role + '\'' +
+                '}';
     }
 }

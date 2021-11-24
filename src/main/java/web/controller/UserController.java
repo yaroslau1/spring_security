@@ -1,16 +1,30 @@
 package web.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import web.model.Role;
+import web.model.User;
+import web.service.RoleService;
+import web.service.UserService;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/")
 public class UserController {
+
+    private UserService userService;
+    private RoleService roleService;
+
+    @Autowired
+    public UserController(UserService userService, RoleService roleService) {
+        this.userService = userService;
+        this.roleService = roleService;
+    }
 
     @RequestMapping(value = "hello", method = RequestMethod.GET)
     public String printWelcome(ModelMap model) {
@@ -29,6 +43,21 @@ public class UserController {
 
     @RequestMapping(value = "index", method = RequestMethod.GET)
     public String indexPage() {
+//        if(userService.getUserByName("user") != null){
+            Set<Role> roles = new HashSet<>();
+            roleService.getAllRoles().stream().forEach((role) -> roles.add(role));
+
+        Set<Role> roleAdmin = new HashSet<>();
+        roleAdmin = roleService.getAllRoles().stream().limit(1).collect(Collectors.toSet());
+
+        Set<Role> roleUser = new HashSet<>();
+        roleUser = roleService.getAllRoles().stream().skip(1).collect(Collectors.toSet());
+
+            userService.saveUser(new User("ADMIN", "ADMIN", (byte)0, "ADMIN", roleAdmin));
+            userService.saveUser(new User("admin", "admin", (byte)0, "admin", roles));
+            userService.saveUser(new User("user", "user", (byte)0, "user", roleUser));
+//        }
+
         return "index";
     }
 
