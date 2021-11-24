@@ -84,9 +84,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/login").anonymous()
                 .antMatchers("/index").permitAll()
                 // защищенные URL
-                .antMatchers("/admin/**").hasRole("ADMIN")
-                .antMatchers("/user/**").hasAnyRole("USER","ADMIN")
-                .antMatchers("/hello").access("hasAnyRole('ADMIN','USER')").anyRequest().authenticated();
+//                .antMatchers("/hello").hasRole("ADMIN")
+//                .anyRequest().authenticated();
+//                .antMatchers("/hello").hasAnyRole("USER","ADMIN")
+                .antMatchers("/hello").access("hasAnyRole('ADMIN','USER')")
+         .anyRequest().authenticated();
     }
 
     @Bean
@@ -94,11 +96,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder(12);
     }
 
-//    @Bean
-//    public DaoAuthenticationProvider daoAuthenticationProvider() {
-//        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
-//        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
-//        daoAuthenticationProvider.setUserDetailsService(userDetailsService);
-//        return daoAuthenticationProvider;
-//    }
+    @Bean
+    public DaoAuthenticationProvider daoAuthenticationProvider() {
+        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
+        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
+        daoAuthenticationProvider.setUserDetailsService(userDetailsService);
+        return daoAuthenticationProvider;
+    }
 }

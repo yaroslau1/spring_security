@@ -53,7 +53,7 @@ public class UserController {
         Set<Role> roleUser = new HashSet<>();
         roleUser = roleService.getAllRoles().stream().skip(1).collect(Collectors.toSet());
 
-            userService.saveUser(new User("ADMIN", "ADMIN", (byte)0, "ADMIN", roleAdmin));
+            //userService.saveUser(new User("ADMIN", "ADMIN", (byte)0, "ADMIN", roleAdmin));
             userService.saveUser(new User("admin", "admin", (byte)0, "admin", roles));
             userService.saveUser(new User("user", "user", (byte)0, "user", roleUser));
 //        }
