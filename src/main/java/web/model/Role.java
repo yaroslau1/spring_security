@@ -8,9 +8,9 @@ import java.util.Set;
 
 @Entity
 @Table(name = "roles")
-@NoArgsConstructor
+@Data
 @AllArgsConstructor
-@EqualsAndHashCode
+@NoArgsConstructor
 public class Role implements GrantedAuthority {
 
     @Id
@@ -20,33 +20,9 @@ public class Role implements GrantedAuthority {
     @Column(name = "role")
     private String role;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
-    public void setUsers(Set<User> users) {
-        this.users = users;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public Set<User> getUsers() {
-        return users;
-    }
-
-    @Column(name = "users")
-    @ManyToMany(mappedBy = "roles")
-    private Set<User> users;
+//    @Column(name = "users")
+//    @ManyToMany(mappedBy = "roles")
+//    private Set<User> users;
 
     public Role(String role) {
         this.role = role;
@@ -59,11 +35,11 @@ public class Role implements GrantedAuthority {
         return role;
     }
 
-    @Override
-    public String toString() {
-        return "Role{" +
-                "id=" + id +
-                ", role='" + role + '\'' +
-                '}';
-    }
+//    @Override
+//    public String toString() {
+//        return "Role{" +
+//                "id=" + id +
+//                ", role='" + role + '\'' +
+//                '}';
+//    }
 }

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -11,5 +11,36 @@
         <h1 th:text="${msg}"></h1>
     </th:block>
 </div>
+<hr>
+<form th:action="@{/logout}" method="GET">
+    <input type="submit" value="Logout"/>
+</form>
+<tbody>
+<table border="1">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Password</th>
+        <th>LastName</th>
+        <th>Age</th>
+        <th>Roles</th>
+        <div sec:authorize="hasAuthority('ADMIN')">
+            <th>Edit</th>
+            <th>Delete</th>
+        </div>
+    </tr>
+    </thead>
+    <tr th:each="user : ${users}">
+        <td th:text="${user.name}"/>
+        <td th:text="${user.password}"/>
+        <td th:text="${user.lastName}"/>
+        <td th:text="${user.age}"/>
+        <td th:text="${user.roles}"/>
+        <div sec:authorize="hasAuthority('ADMIN')">
+            <td><a th:href="@{admin/updateUser/{id}(id=${user.id})}">Edit</a></td>
+            <td><a th:href="@{admin/deleteUser/{id}(id=${user.id})}">Delete</a></td>
+        </div>
+    </tr>
+</table>
 </body>
 </html>

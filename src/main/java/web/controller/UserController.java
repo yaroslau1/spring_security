@@ -33,6 +33,8 @@ public class UserController {
         messages.add("I'm Spring MVC-SECURITY application");
         messages.add("5.2.0 version by sep'19 ");
         model.addAttribute("messages", messages);
+        List<User> users = userService.getAllUsers();
+        model.addAttribute("users", users);
         return "hello";
     }
 
@@ -54,8 +56,16 @@ public class UserController {
         roleUser = roleService.getAllRoles().stream().skip(1).collect(Collectors.toSet());
 
             //userService.saveUser(new User("ADMIN", "ADMIN", (byte)0, "ADMIN", roleAdmin));
-            userService.saveUser(new User("admin", "admin", (byte)0, "admin", roles));
-            userService.saveUser(new User("user", "user", (byte)0, "user", roleUser));
+            userService.saveUser(new User("admin",
+                    "admin",
+                    (byte)0,
+                    "$2a$12$NcBQGelXdh9WqxHEzck/l.2fo4pVyAOxRqZcP/alHW30aYQAg5O4u",
+                    roles));
+            userService.saveUser(new User("user",
+                    "user",
+                    (byte)0,
+                    "$2a$12$MsSHLzOym.WYy6l10njKAuaMWrOKfjER4dI1R.yIY3xPXzPjVG0LC",
+                    roleUser));
 //        }
 
         return "index";
